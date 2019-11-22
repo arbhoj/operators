@@ -1,0 +1,13 @@
+---
+- hosts: all
+  gather_facts: no
+  tasks: 
+  - name: Get only datetime fact
+    setup:
+      filter: ansible_date_time
+  
+  - name: Take a backup
+    uri:
+      url: http://{{ meta.name }}-service:80
+      body_format: raw
+      dest: /tmp/{{ansible_date_time.iso8601_basic_short}}_backup.txt

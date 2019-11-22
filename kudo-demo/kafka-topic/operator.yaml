@@ -1,0 +1,33 @@
+name: "kafka-topic"
+version: "1.0.2"
+kubernetesVersion: 1.15.0
+maintainers:
+- name: Arvind Bhoj
+  email: abhoj@d2iq.com>
+url: https://www.nginx.com
+tasks:
+  - name: do-nothing
+    kind: Apply
+    spec:
+      resources:
+  - name: create-topic
+    kind: Apply
+    spec:
+      resources:
+      - kafka-create-topic.yaml
+  - name: cleanup
+    kind: Delete
+    spec:
+      resources:
+      - kafka-create-topic.yaml
+plans:
+  deploy:
+    strategy: serial
+    phases:
+    - name: create-topic
+      strategy: serial
+      steps:
+      - name: create-topic
+        tasks:
+        - create-topic
+        - cleanup

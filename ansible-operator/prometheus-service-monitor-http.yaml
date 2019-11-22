@@ -1,0 +1,15 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    app: prometheus-operator
+    release: prometheus-kubeaddons
+  name: ansible-http-monitor
+  namespace: na
+spec:
+  endpoints:
+  - interval: 30s
+    port: http-metrics
+  selector:
+    matchLabels:
+      name: ansible-operator

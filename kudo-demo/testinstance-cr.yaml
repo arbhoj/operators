@@ -1,0 +1,14 @@
+apiVersion: kudo.dev/v1beta1
+kind: Instance
+metadata:
+  labels:
+    controller-tools.k8s.io: "1.0"
+    kudo.dev/operator: my-kudo-operator
+  name: new
+  namespace: mykudo
+spec:
+  operatorVersion:
+    name: my-kudo-operator-1.0.3
+  parameters:
+    defaultBody: From CR
+    nodePort: "31000"

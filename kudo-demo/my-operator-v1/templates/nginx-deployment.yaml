@@ -1,0 +1,40 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    run: {{ .Name }}-my-nginx
+  name: {{ .Name }}-my-nginx
+  namespace: default
+spec:
+  replicas: {{ .Params.replicas }}
+  selector:
+    matchLabels:
+      run: {{ .Name }}-my-nginx
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        run: {{ .Name }}-my-nginx
+    spec:
+      containers:
+      - image: nginx:latest
+        imagePullPolicy: IfNotPresent
+        name: {{ .Name }}-my-nginx
+        ports:
+        - containerPort: 80
+          protocol: TCP
+        volumeMounts:
+        - mountPath: /usr/share/nginx/html/index.html
+          name: myconfigmap
+          subPath: index.html
+      volumes:
+      - configMap:
+          defaultMode: 420
+          name: {{ .Name }}-my-conf
+        name: myconfigmap
+

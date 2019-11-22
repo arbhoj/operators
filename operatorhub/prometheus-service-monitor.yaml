@@ -1,0 +1,67 @@
+## CR for monitoring the kafka service on the given namespace
+## Here the following labels match the kafka-svc service
+## kudo.dev/servicemonitor: "true"
+## and "metrics" is the port within the service that serves
+## the metrics
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    app: prometheus-operator
+    release: prometheus-kubeaddons
+  name: ophub-kafka-monitor
+  namespace: ophub
+spec:
+  endpoints:
+  - interval: 30s
+    port: metrics
+  selector:
+    matchLabels:
+      strimzi.io/cluster: my-cluster
+      strimzi.io/kind: Kafka
+      strimzi.io/name: my-cluster-kafka-bootstrap
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  creationTimestamp: "2019-11-04T01:18:26Z"
+  labels:
+    app: prometheus-operator-prometheus
+    chart: prometheus-operator-5.10.9
+    heritage: Tiller
+    release: prometheus-kubeaddons
+  name: prometheus-kubeaddons-prom-prometheus
+  namespace: ophub
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - nodes
+  - services
+  - endpoints
+  - pods
+  verbs:
+  - get
+  - list
+  - watch
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  labels:
+    app: prometheus-operator-prometheus
+    chart: prometheus-operator-5.10.9
+    heritage: Tiller
+    release: prometheus-kubeaddons
+  name: prometheus-kubeaddons-prom-prometheus
+  namespace: ophub
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: prometheus-kubeaddons-prom-prometheus
+subjects:
+- kind: ServiceAccount
+  name: prometheus-kubeaddons-prom-prometheus
+  namespace: kubeaddons

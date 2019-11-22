@@ -1,0 +1,37 @@
+apiVersion: v1
+entries:
+  kafka-topic:
+  - digest: b6eb67c29dd1c19bca58efd8c1c3da1c167f596108e67fb607b4d08438bcfb2b
+    maintainers:
+    - email: abhoj@d2iq.com>
+      name: Arvind Bhoj
+    name: kafka-topic
+    urls:
+    - http://localhost/kafka-topic-1.0.2.tgz
+    version: 1.0.2
+  my-kudo-operator:
+  - digest: 3570031f31ba66a6efccad240e099f3febf40150674f53aa9ed853e8ecd69825
+    maintainers:
+    - email: abhoj@d2iq.com>
+      name: Arvind Bhoj
+    name: my-kudo-operator
+    urls:
+    - http://localhost/my-kudo-operator-1.0.3.tgz
+    version: 1.0.3
+  - digest: e43ea1d0a147772fdeef562679adee4c54d9069d7326d4dff5a8cde086f13ca7
+    maintainers:
+    - email: abhoj@d2iq.com>
+      name: Arvind Bhoj
+    name: my-kudo-operator
+    urls:
+    - http://localhost/my-kudo-operator-1.0.2.tgz
+    version: 1.0.2
+  - digest: 196249b5404602197a757a5306bbcedbcdf81454dfdb35138c733b95578b19f0
+    maintainers:
+    - email: abhoj@d2iq.com>
+      name: Arvind Bhoj
+    name: my-kudo-operator
+    urls:
+    - http://localhost/my-kudo-operator-1.0.1.tgz
+    version: 1.0.1
+generated: "2019-11-18T23:07:21.702295-05:00"

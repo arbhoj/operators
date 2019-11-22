@@ -1,0 +1,11 @@
+---
+- version: v1alpha1
+  group: ansible.operator.com
+  kind: NginxAnsible
+  role: /opt/ansible/roles/nginxansible
+
+- version: v1alpha1
+  group: ansible.operator.com
+  kind: CreateBackup
+  playbook: /opt/ansible/takebackups.yaml
+

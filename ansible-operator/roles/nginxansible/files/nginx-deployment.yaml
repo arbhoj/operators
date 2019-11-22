@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    run: '{{ meta.name }}'
+  name: '{{ meta.name }}'
+  namespace: '{{ meta.namespace }}'
+  annotations:
+    body: {{ default_body }}
+spec:
+  replicas: {{ size }}
+  selector:
+    matchLabels:
+      run: '{{ meta.name }}'
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        run: '{{ meta.name }}'
+    spec:
+      containers:
+      - image: {{ container_image }}
+        env:
+        - name: test 
+          value: {{ default_body }} 
+        imagePullPolicy: IfNotPresent
+        name: '{{ meta.name }}'
+        ports:
+        - containerPort: {{ container_port }}
+          protocol: TCP
+        volumeMounts:
+        - mountPath: /usr/share/nginx/html/index.html
+          name: myconfigmap
+          subPath: index.html
+      volumes:
+      - configMap:
+          defaultMode: 420
+          name: '{{ meta.name }}-conf'
+        name: myconfigmap
+

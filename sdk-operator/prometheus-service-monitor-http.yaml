@@ -1,0 +1,20 @@
+## CR for monitoring the kafka service on the given namespace
+## Here the following labels match the kafka-svc service
+## kudo.dev/servicemonitor: "true"
+## and "metrics" is the port within the service that serves
+## the metrics
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    app: prometheus-operator
+    release: prometheus-kubeaddons
+  name: sdk-operator-monitor-http
+  namespace: sdk
+spec:
+  endpoints:
+  - interval: 30s
+    port: http-metrics
+  selector:
+    matchLabels:
+      name: sdk-operator

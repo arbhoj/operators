@@ -1,0 +1,15 @@
+apiVersion: kudo.dev/v1beta1
+parameters:
+- name: replicas
+  description: "This is the number of replicas to be deployed"
+  default: "1"
+  
+- name: defaultBody
+  description: "This is the body of the default nginx page"
+  default: "Hey I am default"
+  trigger: "update"  
+
+- name: nodePort
+  description: "This is the port on which the service will be exposed on the nodes"
+  default: "30080"
+  trigger: "update" 

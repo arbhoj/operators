@@ -1,0 +1,8 @@
+apiVersion: v1
+data:
+  index.html: |
+    <html><body>{{ .Params.defaultBody }}</body></html>
+kind: ConfigMap
+metadata:
+  name: {{ .Name }}-my-conf
+  namespace: default

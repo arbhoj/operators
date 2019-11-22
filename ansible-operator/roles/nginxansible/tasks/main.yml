@@ -1,0 +1,14 @@
+- name: Create configmap
+  k8s:
+    state: present
+    definition: "{{ lookup('template','../files/nginx-configmap.yaml')  }}"
+
+- name: Create Deployment
+  k8s:
+    state: present
+    definition: "{{ lookup('template','../files/nginx-deployment.yaml')  }}"
+
+- name: Create Service
+  k8s:
+    state: present  
+    definition: "{{ lookup('template','../files/nginx-service.yaml')  }}"

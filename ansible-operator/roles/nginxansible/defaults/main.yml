@@ -1,0 +1,6 @@
+---
+# defaults file for nginxansible
+node_port: 30099 
+container_port: 80
+size: 1
+default_body: "I am updated"

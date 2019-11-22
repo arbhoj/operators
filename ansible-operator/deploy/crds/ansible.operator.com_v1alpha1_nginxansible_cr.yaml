@@ -1,0 +1,13 @@
+apiVersion: ansible.operator.com/v1alpha1
+kind: NginxAnsible
+metadata:
+  name: run-nginxansible
+  namespace: na
+spec:
+  # Add fields here
+  node_port: 30088
+  container_port: 80
+  size: 1
+  default_body: This is the body
+  container_image: >-
+    nginx:alpine 

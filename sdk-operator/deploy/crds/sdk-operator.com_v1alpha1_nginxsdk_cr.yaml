@@ -1,0 +1,10 @@
+apiVersion: sdk-operator.com/v1alpha1
+kind: NginxSDK
+metadata:
+  name: nginxsdk
+spec:
+  # Add fields here
+  size: 3
+  containerport: 80
+  nodeport: 30020
+  defaultbody: "This is the body"

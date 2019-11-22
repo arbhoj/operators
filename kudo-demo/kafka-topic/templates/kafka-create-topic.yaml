@@ -1,0 +1,21 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  creationTimestamp: null
+  labels:
+    run: kafka-cli-{{ .Name }}
+  name: kafka-cli-{{ .Name}}
+spec:
+  template:
+    metadata:
+      labels:
+        run: kafka-cli-{{ .Name }}
+    spec:
+      containers:
+      - image: taion809/kafka-cli
+        name: kafka-cli
+        command:
+        - /bin/bash
+        - -c 
+        - /opt/kafka/bin/kafka-topics.sh --create --bootstrap-server {{ .Name }}-kafka-0.kafka-svc.{{ .Namespace }}.svc.cluster.local:9092 --replication-factor {{ .Params.replfact }} --partitions {{ .Params.partitions  }} --topic {{ .Params.topic }}
+      restartPolicy: Never 

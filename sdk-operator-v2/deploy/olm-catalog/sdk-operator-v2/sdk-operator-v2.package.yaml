@@ -1,0 +1,5 @@
+channels:
+- currentCSV: sdk-operator-v2.v1.0.2
+  name: alpha
+defaultChannel: alpha
+packageName: sdk-operator-v2

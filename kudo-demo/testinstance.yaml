@@ -1,0 +1,16 @@
+apiVersion: kudo.dev/v1alpha1
+kind: Instance
+metadata:
+  annotations:
+  labels:
+    controller-tools.k8s.io: "1.0"
+    kudo.dev/operator: my-kudo-operator
+  name: mynginx-new
+  namespace: mykudo
+spec:
+  operatorVersion:
+    name: my-kudo-operator-1.0.2
+  parameters:
+    defaultBody: This is the latest
+    nodePort: "32760"
+    replicas: 5 

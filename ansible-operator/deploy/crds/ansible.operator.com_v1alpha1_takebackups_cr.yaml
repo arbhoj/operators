@@ -1,0 +1,8 @@
+apiVersion: ansible.operator.com/v1alpha1
+kind: CreateBackup
+metadata:
+  name: run-nginxansible
+  namespace: na
+spec:
+  abc: def
+  # Add fields here

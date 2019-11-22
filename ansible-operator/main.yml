@@ -1,0 +1,75 @@
+---
+# tasks file for nginxansible
+
+- name: Create configmap
+  k8s:
+    state: present
+    definition:
+      apiVersion: v1
+      data:
+        index.html: |
+          <html><body>{{ defaultBody }}</body></html>
+      kind: ConfigMap
+      metadata:
+        name: my-conf
+        namespace: default
+
+- name: Create Deployment
+  k8s:
+    state: present
+    definition:
+      apiVersion: extensions/v1beta1
+      kind: Deployment
+      metadata:
+        labels:
+         run: my-nginx
+         name: my-nginx
+        namespace: default
+      spec:
+        replicas: "{{ replicas }}"
+        selector:
+          matchLabels:
+            run: my-nginx
+        template:
+          metadata:
+            creationTimestamp: null
+            labels:
+              run: my-nginx
+          spec:
+            containers:
+            - image: nginx:alpine
+              imagePullPolicy: IfNotPresent
+              name: my-nginx
+              ports:
+              - containerPort: "{{ containerPort }}"
+                protocol: TCP
+              volumeMounts:
+              - mountPath: /usr/share/nginx/html/index.html
+                name: myconfigmap
+                subPath: index.html
+            volumes:
+            - configMap:
+                defaultMode: 420
+                name: my-conf
+              name: myconfigmap
+
+- name: Create Service
+  k8s:
+    state: present  
+    definition:
+      apiVersion: v1
+      kind: Service
+      metadata:
+        labels:
+          run: my-nginx
+        name: my-nginx
+        namespace: default
+      spec:
+        ports:
+        - port: 80
+          protocol: TCP
+          targetPort: 80
+          nodePort: "{{ nodePort }}"
+        selector:
+          run: my-nginx
+        type: NodePort

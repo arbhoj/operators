@@ -1,0 +1,14 @@
+apiVersion: kudo.dev/v1beta1
+parameters:
+- name: topic
+  description: "This is the name of the kafka topic to be deployed"
+  default: ""
+- name: replfact
+  description: "This is the replication factpr for kafka"
+  default: "3"
+
+- name: partitions
+  description: "This is the number of topic partitions to be created"
+  default: "3"
+
+ 

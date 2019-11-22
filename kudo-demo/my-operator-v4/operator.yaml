@@ -1,0 +1,57 @@
+name: "my-kudo-operator"
+version: "1.0.3"
+kubernetesVersion: 1.15.0
+maintainers:
+- name: Arvind Bhoj 
+  email: abhoj@d2iq.com>
+url: https://www.nginx.com
+tasks:
+  nginx:
+    resources:
+    - nginx-deployment.yaml
+    - nginx-service.yaml
+  config:
+    resources:
+    - nginx-configmap.yaml
+  do-nothing:
+    resources:
+plans:
+  deploy:
+    strategy: serial
+    phases:
+    - name: install
+      strategy: serial
+      steps:
+      - name: configmap-setup
+        tasks:
+        - config
+        - nginx
+  update:
+    strategy: parallel
+    phases:
+    - name: update_service
+      strategy: parallel
+      steps:
+      - name: update-service
+        tasks:
+        - config
+        - nginx 
+  upgrade:
+    strategy: serial
+    phases:
+    - name: install
+      strategy: serial
+      steps:
+      - name: configmap-setup
+        tasks:
+        - config
+        - nginx 
+  do-nothing:
+    strategy: serial
+    phases:
+    - name: do-nothing
+      strategy: serial
+      steps:
+        - name: do-nothing
+          tasks:
+          - do-nothing     

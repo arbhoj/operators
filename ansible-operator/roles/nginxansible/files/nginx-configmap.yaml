@@ -1,0 +1,8 @@
+apiVersion: v1
+data:
+  index.html: |
+    <html><body>{{ default_body }}</body></html>
+kind: ConfigMap
+metadata:
+  name: '{{meta.name}}-conf'
+  namespace: '{{ meta.namespace }}'
