@@ -1,0 +1,18 @@
+apiVersion: apiextensions.k8s.io/v1beta1
+kind: CustomResourceDefinition
+metadata:
+  name: nginxansibles.ansible.operator.com
+spec:
+  group: ansible.operator.com
+  names:
+    kind: NginxAnsible
+    listKind: NginxAnsibleList
+    plural: nginxansibles
+    singular: nginxansible
+  scope: Namespaced
+  subresources:
+    status: {}
+  versions:
+  - name: v1alpha1
+    served: true
+    storage: true

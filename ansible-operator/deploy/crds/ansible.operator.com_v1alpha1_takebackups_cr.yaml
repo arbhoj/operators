@@ -1,7 +1,7 @@
 apiVersion: ansible.operator.com/v1alpha1
 kind: CreateBackup
 metadata:
-  name: run-nginxansible
+  name: new-backup
   namespace: na
 spec:
   abc: def

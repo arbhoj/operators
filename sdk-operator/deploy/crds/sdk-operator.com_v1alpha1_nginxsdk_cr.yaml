@@ -2,6 +2,7 @@ apiVersion: sdk-operator.com/v1alpha1
 kind: NginxSDK
 metadata:
   name: nginxsdk
+  namespace: sdk
 spec:
   # Add fields here
   size: 3

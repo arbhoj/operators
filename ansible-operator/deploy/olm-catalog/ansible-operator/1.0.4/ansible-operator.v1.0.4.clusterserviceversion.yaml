@@ -1,0 +1,176 @@
+apiVersion: operators.coreos.com/v1alpha1
+kind: ClusterServiceVersion
+metadata:
+  annotations:
+    alm-examples: |-
+      [
+        {
+          "apiVersion": "ansible.operator.com/v1alpha1",
+          "kind": "NginxAnsible",
+          "metadata": {
+            "name": "run-nginxansible",
+            "namespace": "na"
+          },
+          "spec": {
+            "container_image": "nginx:alpine ",
+            "container_port": 80,
+            "default_body": "This is the body",
+            "node_port": 30088,
+            "size": 1
+          }
+        },
+        {
+          "apiVersion": "ansible.operator.com/v1alpha1",
+          "kind": "CreateBackup",
+          "metadata": {
+            "name": "run-nginxansible",
+            "namespace": "na"
+          },
+          "spec": {
+            "abc": "def"
+          }
+        }
+      ]
+    capabilities: Basic Install
+  name: ansible-operator.v1.0.4
+  namespace: na
+spec:
+  apiservicedefinitions: {}
+  customresourcedefinitions:
+    owned:
+    - description: This creates a sample nginx deployment
+      displayName: NginxAnsible
+      kind: NginxAnsible
+      name: nginxansibles.ansible.operator.com
+      version: v1alpha1
+    - description: This takes a backup of the default page
+      displayName: CreateBackup
+      kind: CreateBackup
+      name: createbackups.ansible.operator.com
+      version: v1alpha1
+  description: Placeholder description
+  displayName: Ansible Operator
+  install:
+    spec:
+      deployments:
+      - name: ansible-operator
+        spec:
+          replicas: 1
+          selector:
+            matchLabels:
+              name: ansible-operator
+          strategy: {}
+          template:
+            metadata:
+              labels:
+                name: ansible-operator
+            spec:
+              containers:
+              - command:
+                - /usr/local/bin/ao-logs
+                - /tmp/ansible-operator/runner
+                - stdout
+                image: arbhoj/ansible-operator:v1.0.4
+                imagePullPolicy: Always
+                name: ansible
+                resources: {}
+                volumeMounts:
+                - mountPath: /tmp/ansible-operator/runner
+                  name: runner
+                  readOnly: true
+              - env:
+                - name: WATCH_NAMESPACE
+                  valueFrom:
+                    fieldRef:
+                      fieldPath: metadata.annotations['olm.targetNamespaces']
+                - name: POD_NAME
+                  valueFrom:
+                    fieldRef:
+                      fieldPath: metadata.name
+                - name: OPERATOR_NAME
+                  value: ansible-operator
+                - name: ANSIBLE_GATHERING
+                  value: explicit
+                image: arbhoj/ansible-operator:v1.0.4
+                imagePullPolicy: Always
+                name: operator
+                resources: {}
+                volumeMounts:
+                - mountPath: /tmp/ansible-operator/runner
+                  name: runner
+              serviceAccountName: ansible-operator
+              volumes:
+              - emptyDir: {}
+                name: runner
+      permissions:
+      - rules:
+        - apiGroups:
+          - ""
+          resources:
+          - pods
+          - services
+          - services/finalizers
+          - endpoints
+          - persistentvolumeclaims
+          - events
+          - configmaps
+          - secrets
+          verbs:
+          - '*'
+        - apiGroups:
+          - apps
+          resources:
+          - deployments
+          - daemonsets
+          - replicasets
+          - statefulsets
+          verbs:
+          - '*'
+        - apiGroups:
+          - monitoring.coreos.com
+          resources:
+          - servicemonitors
+          verbs:
+          - get
+          - create
+        - apiGroups:
+          - apps
+          resourceNames:
+          - ansible-operator
+          resources:
+          - deployments/finalizers
+          verbs:
+          - update
+        - apiGroups:
+          - ""
+          resources:
+          - pods
+          verbs:
+          - get
+        - apiGroups:
+          - apps
+          resources:
+          - replicasets
+          verbs:
+          - get
+        - apiGroups:
+          - ansible.operator.com
+          resources:
+          - '*'
+          verbs:
+          - '*'
+        serviceAccountName: ansible-operator
+    strategy: deployment
+  installModes:
+  - supported: true
+    type: OwnNamespace
+  - supported: true
+    type: SingleNamespace
+  - supported: false
+    type: MultiNamespace
+  - supported: true
+    type: AllNamespaces
+  maturity: alpha
+  provider: {}
+  replaces: ansible-operator.v1.0.3
+  version: 1.0.4

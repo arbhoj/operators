@@ -5,3 +5,5 @@ COPY watches.yaml ${HOME}/watches.yaml
 COPY roles/ ${HOME}/roles/
 
 COPY takebackups.yaml ${HOME}/takebackups.yaml
+
+COPY deletebackups.yaml ${HOME}/deletebackups.yaml
