@@ -1,19 +1,25 @@
 name: "my-kudo-operator"
-version: "1.0.3"
+version: "1.0.4"
 kubernetesVersion: 1.15.0
 maintainers:
 - name: Arvind Bhoj 
   email: abhoj@d2iq.com>
 url: https://www.nginx.com
 tasks:
-  nginx:
+- name: nginx
+  kind: Apply
+  spec:
     resources:
     - nginx-deployment.yaml
     - nginx-service.yaml
-  config:
+- name: config
+  kind: Apply
+  spec:
     resources:
     - nginx-configmap.yaml
-  do-nothing:
+- name: do-nothing
+  kind: Apply
+  spec:
     resources:
 plans:
   deploy:

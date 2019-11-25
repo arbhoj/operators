@@ -1,0 +1,6 @@
+---
+- version: v1alpha1
+  group: helm.example.com
+  kind: Helmtest
+  namespace: helmnginx
+  chart: /opt/helm/helm-charts/helmtest

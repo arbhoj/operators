@@ -2,14 +2,14 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   labels:
-    run: my-nginx
-  name: my-nginx
+    run: {{ .Name }}-my-nginx
+  name: {{ .Name }}-my-nginx
   namespace: default
 spec:
   replicas: {{ .Params.replicas }}
   selector:
     matchLabels:
-      run: my-nginx
+      run: {{ .Name }}-my-nginx
   strategy:
     rollingUpdate:
       maxSurge: 25%
@@ -19,14 +19,14 @@ spec:
     metadata:
       creationTimestamp: null
       labels:
-        run: my-nginx
+        run: {{ .Name }}-my-nginx
     spec:
       containers:
       - image: nginx:alpine
         imagePullPolicy: IfNotPresent
-        name: my-nginx
+        name: {{ .Name }}-my-nginx
         ports:
-        - containerPort: {{ containerPort }}
+        - containerPort: {{ .Params.containerPort }}
           protocol: TCP
         volumeMounts:
         - mountPath: /usr/share/nginx/html/index.html

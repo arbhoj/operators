@@ -4,5 +4,5 @@ data:
     <html><body>{{ .Params.defaultBody }}</body></html>
 kind: ConfigMap
 metadata:
-  name: my-conf
+  name: {{ .Name }}-my-conf
   namespace: default

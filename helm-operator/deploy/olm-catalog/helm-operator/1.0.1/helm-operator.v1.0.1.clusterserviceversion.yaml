@@ -1,0 +1,168 @@
+apiVersion: operators.coreos.com/v1alpha1
+kind: ClusterServiceVersion
+metadata:
+  namespace: helmnginx
+  annotations:
+    alm-examples: |-
+      [
+        {
+          "apiVersion": "helm.example.com/v1alpha1",
+          "kind": "Helmtest",
+          "metadata": {
+            "name": "my-helmtest"
+          },
+          "spec": {
+            "affinity": {},
+            "fullnameOverride": "",
+            "image": {
+              "pullPolicy": "IfNotPresent",
+              "repository": "nginx",
+              "tag": "stable"
+            },
+            "imagePullSecrets": [],
+            "ingress": {
+              "annotations": {},
+              "enabled": false,
+              "hosts": [
+                {
+                  "host": "chart-example.local",
+                  "paths": []
+                }
+              ],
+              "tls": []
+            },
+            "nameOverride": "",
+            "nodeSelector": {},
+            "replicaCount": 1,
+            "resources": {},
+            "service": {
+              "nodePort": 32750,
+              "port": 80,
+              "type": "NodePort"
+            },
+            "tolerations": []
+          }
+        }
+      ]
+    capabilities: Basic Install
+  name: helm-operator.v1.0.1
+  namespace: helmnginx
+spec:
+  apiservicedefinitions: {}
+  customresourcedefinitions:
+    owned:
+    - kind: Helmtest
+      name: helmtests.helm.example.com
+      version: v1alpha1
+      description: This operator deploys nginx instance along with a service using helm operator
+      displayName: HelmTest
+  description: Placeholder description
+  displayName: Helm Operator
+  install:
+    spec:
+      deployments:
+      - name: helm-operator
+        spec:
+          replicas: 1
+          selector:
+            matchLabels:
+              name: helm-operator
+          strategy: {}
+          template:
+            metadata:
+              labels:
+                name: helm-operator
+            spec:
+              containers:
+              - env:
+                - name: WATCH_NAMESPACE
+                  valueFrom:
+                    fieldRef:
+                      fieldPath: metadata.annotations['olm.targetNamespaces']
+                - name: POD_NAME
+                  valueFrom:
+                    fieldRef:
+                      fieldPath: metadata.name
+                - name: OPERATOR_NAME
+                  value: helm-operator
+                image: arbhoj/helm-operator:v1.0.1
+                imagePullPolicy: Always
+                name: helm-operator
+                resources: {}
+              serviceAccountName: helm-operator
+      permissions:
+      - rules:
+        - apiGroups:
+          - ""
+          resources:
+          - namespaces
+          verbs:
+          - get
+        - apiGroups:
+          - ""
+          resources:
+          - configmaps
+          - secrets
+          verbs:
+          - '*'
+        - apiGroups:
+          - ""
+          resources:
+          - pods
+          - services
+          verbs:
+          - '*'
+        - apiGroups:
+          - apps
+          resources:
+          - deployments
+          verbs:
+          - '*'
+        - apiGroups:
+          - monitoring.coreos.com
+          resources:
+          - servicemonitors
+          verbs:
+          - get
+          - create
+        - apiGroups:
+          - apps
+          resourceNames:
+          - helm-operator
+          resources:
+          - deployments/finalizers
+          verbs:
+          - update
+        - apiGroups:
+          - ""
+          resources:
+          - pods
+          verbs:
+          - get
+        - apiGroups:
+          - apps
+          resources:
+          - replicasets
+          verbs:
+          - get
+        - apiGroups:
+          - helm.example.com
+          resources:
+          - '*'
+          verbs:
+          - '*'
+        serviceAccountName: helm-operator
+    strategy: deployment
+  installModes:
+  - supported: true
+    type: OwnNamespace
+  - supported: true
+    type: SingleNamespace
+  - supported: false
+    type: MultiNamespace
+  - supported: true
+    type: AllNamespaces
+  maturity: alpha
+  provider: {}
+  replaces: helm-operator.v0.0.0
+  version: 1.0.1
